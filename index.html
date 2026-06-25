@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Business Website</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+}
+
+.hero{
+    height:100vh;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    background-size:cover;
+    background-position:center;
+}
+
+.logo{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:20px;
+    border:4px solid #fff;
+}
+
+.hero h1{
+    font-size:48px;
+    margin-bottom:15px;
+}
+
+.hero p{
+    max-width:700px;
+    margin-bottom:20px;
+}
+
+.btn{
+    background:#25D366;
+    color:#fff;
+    padding:12px 25px;
+    text-decoration:none;
+    border-radius:30px;
+}
+
+.section{
+    padding:60px 20px;
+    max-width:1200px;
+    margin:auto;
+}
+
+.card-box{
+    background:#fff;
+    padding:25px;
+    border-radius:15px;
+    margin-bottom:30px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+}
+
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.gallery img{
+    width:100%;
+    height:250px;
+    object-fit:cover;
+    border-radius:15px;
+}
+
+.contact{
+    background:#111;
+    color:#fff;
+    text-align:center;
+    padding:60px 20px;
+}
+
+.whatsapp{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    background:#25D366;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+    text-decoration:none;
+    font-size:30px;
+}
+
+footer{
+    background:#000;
+    color:#fff;
+    text-align:center;
+    padding:20px;
+}
+
+.loader{
+    text-align:center;
+    padding:100px;
+    font-size:24px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+    <div class="loader">Loading...</div>
+</div>
+
+<script>
+
+const slug =
+new URLSearchParams(window.location.search).get("slug");
+
+if(!slug){
+    document.getElementById("app").innerHTML =
+    "<h2 style='padding:50px;text-align:center'>Slug Missing</h2>";
+}
+
+fetch(
+`https://deals.wajidtechs.com/bizbox/get_business.php?slug=${slug}`
+)
+.then(res => res.json())
+.then(data => {
+
+    if(!data.status){
+        document.getElementById("app").innerHTML =
+        "<h2 style='padding:50px;text-align:center'>Business Not Found</h2>";
+        return;
+    }
+
+    const b = data.data;
+
+    const heroImage =
+    b.images.length ? b.images[0] :
+    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d";
+
+    let gallery = "";
+
+    b.images.forEach(img=>{
+        gallery += `<img src="${img}">`;
+    });
+
+    document.getElementById("app").innerHTML = `
+
+<header class="hero"
+style="
+background:
+linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
+url('${heroImage}');
+background-size:cover;
+background-position:center;
+">
+
+${b.logo ?
+`<img class="logo" src="${b.logo}">`
+:''}
+
+<h1>${b.business_name}</h1>
+
+<p>${b.description || ''}</p>
+
+<a class="btn" href="${b.actions.call}">
+📞 Call Now
+</a>
+
+</header>
+
+<section class="section">
+
+<div class="card-box">
+<h2>About Us</h2>
+<p>${b.description || ''}</p>
+<br>
+<p>${b.address || ''}</p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+📞<br>${b.mobile || ''}
+</div>
+
+<div class="card">
+📧<br>${b.email || ''}
+</div>
+
+<div class="card">
+📍<br>${b.location || ''}
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 style="text-align:center;margin-bottom:30px">
+Gallery
+</h2>
+
+<div class="gallery">
+${gallery}
+</div>
+
+</section>
+
+<section class="contact">
+
+<h2>Contact ${b.business_name}</h2>
+<br>
+
+<p>${b.mobile || ''}</p>
+<br>
+
+<p>${b.email || ''}</p>
+<br>
+
+<a class="btn" href="${b.actions.call}">
+Call Now
+</a>
+
+</section>
+
+<a
+class="whatsapp"
+href="${b.actions.whatsapp}"
+target="_blank">
+💬
+</a>
+
+<footer>
+© ${new Date().getFullYear()}
+${b.business_name}
+
+<br><br>
+
+powered by
+<a
+href="https://wajidtechs.com"
+style="color:white">
+wajidtechs.com
+</a>
+
+</footer>
+`;
+
+})
+.catch(err=>{
+    console.log(err);
+
+    document.getElementById("app").innerHTML =
+    "<h2 style='padding:50px;text-align:center'>API Error</h2>";
+});
+
+</script>
+
+</body>
+</html>
+
