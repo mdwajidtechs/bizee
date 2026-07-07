@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WAJIDTECHS.COM</title>
+
+<title>Business Website</title>
 
 <style>
 *{
@@ -19,62 +20,59 @@ body{
 }
 
 .hero{
-    height:100vh;
-    background:
-    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
-    url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d');
-    background-size:cover;
-    background-position:center;
+    min-height:100vh;
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
     text-align:center;
-    color:white;
+    color:#fff;
     padding:20px;
+    background-size:cover;
+    background-position:center;
 }
 
 .logo{
     width:140px;
     height:140px;
     border-radius:50%;
-    border:5px solid white;
     object-fit:cover;
+    border:5px solid #fff;
     margin-bottom:20px;
 }
 
 .hero h1{
-    font-size:55px;
+    font-size:50px;
     margin-bottom:15px;
 }
 
 .hero p{
     max-width:800px;
-    line-height:1.7;
+    line-height:1.8;
     margin-bottom:25px;
 }
 
 .btn{
     display:inline-block;
-    padding:14px 30px;
-    background:#25D366;
-    color:white;
-    text-decoration:none;
+    padding:14px 28px;
     border-radius:50px;
-    font-weight:bold;
+    text-decoration:none;
+    color:#fff;
+    background:#25D366;
+    margin:5px;
 }
 
 .section{
     max-width:1200px;
     margin:auto;
-    padding:70px 20px;
+    padding:60px 20px;
 }
 
 .card{
-    background:white;
+    background:#fff;
     padding:30px;
     border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
 .gallery{
@@ -93,13 +91,9 @@ body{
 
 .contact{
     background:#111;
-    color:white;
+    color:#fff;
     text-align:center;
     padding:70px 20px;
-}
-
-.contact h2{
-    margin-bottom:20px;
 }
 
 .contact p{
@@ -114,119 +108,229 @@ body{
     height:65px;
     border-radius:50%;
     background:#25D366;
-    color:white;
+    color:#fff;
     text-decoration:none;
     display:flex;
     justify-content:center;
     align-items:center;
-    font-size:28px;
-    box-shadow:0 5px 15px rgba(0,0,0,.3);
+    font-size:30px;
+    box-shadow:0 5px 20px rgba(0,0,0,.3);
 }
 
 footer{
     background:#000;
-    color:white;
+    color:#fff;
     text-align:center;
-    padding:25px;
+    padding:20px;
+}
+
+.loader{
+    text-align:center;
+    padding:120px;
+    font-size:24px;
+}
+
+.error{
+    text-align:center;
+    padding:100px 20px;
 }
 </style>
 </head>
 <body>
 
-<section class="hero">
+<div id="app">
+    <div class="loader">Loading Business...</div>
+</div>
 
-    <img
-        class="logo"
-        src="https://via.placeholder.com/200"
-        alt="Logo">
+<script>
 
-    <h1>WAJIDTECHS.COM</h1>
+const slug = new URLSearchParams(window.location.search).get("slug");
 
-    <p>
-        Empowering businesses with digital transformation,
-        website development, mobile applications, business
-        integration solutions, and AI-powered technology.
-    </p>
+if(!slug){
+    document.getElementById("app").innerHTML = `
+        <div class="error">
+            <h2>Slug Missing</h2>
+            <p>Example: ?slug=wajidtechs-com</p>
+        </div>
+    `;
+} else {
 
-    <a
-        href="https://wa.me/919999999999?text=I%20have%20a%20query%20for%20my%20business"
-        class="btn"
-        target="_blank">
-        Contact on WhatsApp
-    </a>
+    fetch(`https://deals.wajidtechs.com/bizbox/api?slug=${slug}`)
+    .then(response => response.json())
+    .then(result => {
 
-</section>
+        if(!result.status || !result.data){
+            throw new Error("Business not found");
+        }
 
-<section class="section">
+        const b = result.data;
 
-    <div class="card">
-        <h2>About Us</h2>
-        <br>
+        const heroImage =
+            b.images && b.images.length
+            ? b.images[0]
+            : "https://images.unsplash.com/photo-1521737604893-d14cc237f11d";
 
-        <p>
-            WajidTechs helps businesses establish a powerful
-            online presence through modern websites,
-            mobile applications, digital branding,
-            automation, and business integration services.
-        </p>
-    </div>
+        let gallery = "";
 
-    <h2 style="text-align:center;margin-top:50px;">
-        Gallery
-    </h2>
+        if(Array.isArray(b.images)){
+            b.images.forEach(img => {
+                gallery += `
+                    <img
+                        src="${img}"
+                        alt="Gallery"
+                        loading="lazy"
+                    >
+                `;
+            });
+        }
 
-    <div class="gallery">
+        document.title = b.business_name;
 
-        <img src="https://picsum.photos/600/400?1">
-        <img src="https://picsum.photos/600/400?2">
-        <img src="https://picsum.photos/600/400?3">
-        <img src="https://picsum.photos/600/400?4">
-        <img src="https://picsum.photos/600/400?5">
+        document.getElementById("app").innerHTML = `
 
-    </div>
+            <section
+                class="hero"
+                style="
+                    background:
+                    linear-gradient(
+                        rgba(0,0,0,.65),
+                        rgba(0,0,0,.65)
+                    ),
+                    url('${heroImage}');
+                "
+            >
 
-</section>
+                <img
+                    class="logo"
+                    src="${b.logo}"
+                    alt="${b.business_name}"
+                >
 
-<section class="contact">
+                <h1>${b.business_name}</h1>
 
-    <h2>Contact WAJIDTECHS.COM</h2>
+                <p>${b.description || ""}</p>
 
-    <p>📞 +91 9121805781</p>
+                <div>
 
-    <p>📧 wajidtech.coms@gmail.com</p>
+                    <a
+                        class="btn"
+                        href="${b.actions.whatsapp}"
+                        target="_blank"
+                    >
+                        WhatsApp
+                    </a>
 
-    <br>
+                    <a
+                        class="btn"
+                        href="${b.actions.call}"
+                    >
+                        Call Now
+                    </a>
 
-    <a
-        href="tel:+919121805781"
-        class="btn">
-        Call Now
-    </a>
+                </div>
 
-</section>
+            </section>
 
-<a
-    class="whatsapp"
-    href="https://wa.me/919121805781?text=I%20have%20a%20query%20for%20my%20business"
-    target="_blank">
-    💬
-</a>
+            <section class="section">
 
-<footer>
+                <div class="card">
 
-    © 2026 WAJIDTECHS.COM
+                    <h2>About Us</h2>
 
-    <br><br>
+                    <br>
 
-    Powered by
-    <a
-        href="https://wajidtechs.com"
-        target="_blank"
-        style="color:white;text-decoration:none;">
-        wajidtechs.com
-    </a>
+                    <p>${b.description || ""}</p>
 
-</footer>
+                    <br>
+
+                    <p>
+                        <strong>Address:</strong><br>
+                        ${b.address || "N/A"}
+                    </p>
+
+                </div>
+
+                <h2
+                    style="
+                        text-align:center;
+                        margin-top:50px;
+                    "
+                >
+                    Gallery
+                </h2>
+
+                <div class="gallery">
+                    ${gallery}
+                </div>
+
+            </section>
+
+            <section class="contact">
+
+                <h2>Contact ${b.business_name}</h2>
+
+                <br>
+
+                <p>📞 ${b.mobile}</p>
+
+                <p>📧 ${b.email}</p>
+
+                <br>
+
+                <a
+                    class="btn"
+                    href="${b.actions.email}"
+                >
+                    Send Email
+                </a>
+
+            </section>
+
+            <a
+                class="whatsapp"
+                href="${b.actions.whatsapp}?text=I%20have%20a%20query%20for%20my%20business"
+                target="_blank"
+            >
+                💬
+            </a>
+
+            <footer>
+
+                © ${new Date().getFullYear()}
+                ${b.business_name}
+
+                <br><br>
+
+                Powered by
+
+                <a
+                    href="https://wajidtechs.com"
+                    target="_blank"
+                    style="
+                        color:#fff;
+                        text-decoration:none;
+                    "
+                >
+                    wajidtechs.com
+                </a>
+
+            </footer>
+
+        `;
+    })
+    .catch(error => {
+
+        console.error(error);
+
+        document.getElementById("app").innerHTML = `
+            <div class="error">
+                <h2>Unable to load business</h2>
+                <p>Please check the slug and try again.</p>
+            </div>
+        `;
+    });
+}
+</script>
 
 </body>
 </html>
