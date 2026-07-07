@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Business Page</title>
+<title>Loading Business...</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 *{
@@ -12,102 +16,150 @@
     box-sizing:border-box;
 }
 
+html{
+    scroll-behavior:smooth;
+}
+
 body{
-    font-family:Arial,sans-serif;
-    background:#f5f5f5;
-    color:#333;
+    font-family:'Poppins',sans-serif;
+    background:#f5f7fb;
+    color:#222;
+    overflow-x:hidden;
+}
+
+.loading{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    font-weight:600;
 }
 
 .hero{
-    height:90vh;
+    min-height:100vh;
     background-size:cover;
     background-position:center;
     display:flex;
-    flex-direction:column;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
     text-align:center;
-    color:#fff;
-    padding:20px;
+    padding:30px;
     position:relative;
 }
 
 .hero::before{
-    content:"";
+    content:'';
     position:absolute;
     inset:0;
-    background:rgba(0,0,0,.65);
+    background:linear-gradient(
+        135deg,
+        rgba(0,0,0,.85),
+        rgba(0,0,0,.55)
+    );
 }
 
-.hero *{
+.hero-content{
     position:relative;
     z-index:2;
+    max-width:900px;
+    animation:fadeUp 1s ease;
 }
 
 .logo{
-    width:120px;
-    height:120px;
+    width:140px;
+    height:140px;
     border-radius:50%;
     object-fit:cover;
+    border:5px solid #fff;
     margin-bottom:20px;
-    border:4px solid #fff;
+    box-shadow:0 15px 40px rgba(0,0,0,.4);
 }
 
 .hero h1{
-    font-size:3rem;
+    color:#fff;
+    font-size:4rem;
     margin-bottom:15px;
+    font-weight:800;
 }
 
 .hero p{
-    max-width:700px;
-    margin-bottom:20px;
+    color:#f1f1f1;
+    font-size:1.1rem;
+    line-height:1.8;
+    margin-bottom:25px;
 }
 
 .btn{
     display:inline-block;
+    padding:14px 30px;
     background:#25D366;
     color:#fff;
     text-decoration:none;
-    padding:12px 25px;
     border-radius:50px;
-    font-weight:bold;
+    font-weight:700;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-4px);
 }
 
 .section{
     max-width:1200px;
     margin:auto;
-    padding:60px 20px;
+    padding:80px 20px;
 }
 
-.card-box{
+.section-title{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.section-title h2{
+    font-size:2.5rem;
+    margin-bottom:10px;
+}
+
+.about-box{
     background:#fff;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    padding:40px;
+    border-radius:25px;
+    box-shadow:0 10px 40px rgba(0,0,0,.08);
+}
+
+.about-box p{
+    line-height:1.9;
 }
 
 .address{
-    margin-top:20px;
+    margin-top:25px;
+    font-size:15px;
 }
 
-.grid{
+.info-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    margin-top:30px;
+    gap:25px;
+    margin-top:40px;
 }
 
-.card{
+.info-card{
     background:#fff;
-    padding:25px;
+    padding:30px;
+    border-radius:20px;
     text-align:center;
-    border-radius:12px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    transition:.3s;
 }
 
-.center{
-    text-align:center;
-    margin-bottom:30px;
+.info-card:hover{
+    transform:translateY(-8px);
+}
+
+.info-card .icon{
+    font-size:35px;
+    margin-bottom:15px;
 }
 
 .gallery{
@@ -118,44 +170,58 @@ body{
 
 .gallery img{
     width:100%;
-    height:250px;
+    height:260px;
     object-fit:cover;
-    border-radius:12px;
+    border-radius:20px;
+    transition:.4s;
+}
+
+.gallery img:hover{
+    transform:scale(1.04);
 }
 
 .contact{
     background:#111;
     color:#fff;
     text-align:center;
-    padding:60px 20px;
+    padding:80px 20px;
+}
+
+.contact h2{
+    margin-bottom:20px;
 }
 
 .contact p{
     margin:10px 0;
 }
 
+.contact .btn{
+    margin-top:20px;
+}
+
 .whatsapp{
     position:fixed;
-    bottom:20px;
-    right:20px;
-    width:60px;
-    height:60px;
+    bottom:25px;
+    right:25px;
+    width:65px;
+    height:65px;
     border-radius:50%;
     background:#25D366;
     color:#fff;
     text-decoration:none;
-    font-size:30px;
     display:flex;
     align-items:center;
     justify-content:center;
-    box-shadow:0 5px 20px rgba(0,0,0,.3);
+    font-size:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    z-index:999;
 }
 
 footer{
     background:#000;
     color:#fff;
     text-align:center;
-    padding:20px;
+    padding:25px;
 }
 
 footer a{
@@ -163,10 +229,35 @@ footer a{
     text-decoration:none;
 }
 
-.loading{
-    text-align:center;
-    padding:100px 20px;
-    font-size:20px;
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media(max-width:768px){
+
+    .hero h1{
+        font-size:2.4rem;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .logo{
+        width:110px;
+        height:110px;
+    }
+
+    .section-title h2{
+        font-size:2rem;
+    }
 }
 </style>
 </head>
@@ -180,85 +271,150 @@ footer a{
 
 const slug = new URLSearchParams(window.location.search).get("slug") || "wajidtechs-com";
 
-fetch(`https://deals.wajidtechs.com/bizbox/api?slug=${slug}`)
+const API_URL =
+`https://deals.wajidtechs.com/bizbox/api?slug=${slug}`;
+
+const BASE_URL = "https://deals.wajidtechs.com/";
+
+fetch(API_URL)
 .then(res => res.json())
 .then(response => {
 
-    const business = response.data || response;
+    if(!response.status || !response.data){
+        throw new Error("Business not found");
+    }
+
+    const business = response.data;
+
+    document.title =
+    business.business_name || "Business Page";
+
+    const logo =
+        business.logo
+        ? (business.logo.startsWith("http")
+            ? business.logo
+            : BASE_URL + business.logo)
+        : "";
 
     const heroImage =
-        business.image1 ||
-        "https://images.unsplash.com/photo-1521737604893-d14cc237f11d";
+        business.image1
+        ? (business.image1.startsWith("http")
+            ? business.image1
+            : BASE_URL + business.image1)
+        : "https://images.unsplash.com/photo-1521737604893-d14cc237f11d";
 
     let galleryHtml = "";
 
     for(let i=1;i<=5;i++){
-        if(business[`image${i}`]){
+
+        const image = business[`image${i}`];
+
+        if(image){
+
+            const imgUrl =
+                image.startsWith("http")
+                ? image
+                : BASE_URL + image;
+
             galleryHtml += `
-                <img src="${business[`image${i}`]}" alt="">
+                <img src="${imgUrl}" alt="Gallery Image">
             `;
         }
     }
 
-    document.title = business.business_name;
-
     document.getElementById("app").innerHTML = `
 
-    <header class="hero" style="background-image:url('${heroImage}')">
+    <section
+    class="hero"
+    style="background-image:url('${heroImage}')">
 
-        ${
-            business.logo
-            ? `<img class="logo" src="${business.logo}" alt="Logo">`
-            : ""
-        }
+        <div class="hero-content">
 
-        <h1>${business.business_name || ""}</h1>
+            ${
+                logo
+                ? `<img src="${logo}" class="logo">`
+                : ""
+            }
 
-        <p>${business.description || ""}</p>
+            <h1>${business.business_name || ""}</h1>
 
-        ${
-            business.mobile
-            ? `<a class="btn" href="tel:${business.mobile}">📞 Call Now</a>`
-            : ""
-        }
+            <p>
+                ${business.description || ""}
+            </p>
 
-    </header>
+            ${
+                business.mobile
+                ? `
+                <a
+                href="tel:${business.mobile}"
+                class="btn">
+                📞 Call Now
+                </a>
+                `
+                : ""
+            }
+
+        </div>
+
+    </section>
 
     <section class="section">
 
-        <div class="card-box">
+        <div class="section-title">
             <h2>About Us</h2>
-            <p>${business.description || ""}</p>
+        </div>
+
+        <div class="about-box">
+
+            <p>
+                ${business.description || ""}
+            </p>
 
             ${
                 business.address
                 ? `
                 <div class="address">
-                    <strong>Address:</strong><br>
+                    <strong>📍 Address</strong><br><br>
                     ${business.address.replace(/\n/g,"<br>")}
                 </div>
                 `
                 : ""
             }
+
         </div>
 
-        <div class="grid">
+        <div class="info-grid">
 
             ${
                 business.mobile
-                ? `<div class="card">📞<br>${business.mobile}</div>`
+                ? `
+                <div class="info-card">
+                    <div class="icon">📞</div>
+                    ${business.mobile}
+                </div>
+                `
                 : ""
             }
 
             ${
                 business.email
-                ? `<div class="card">📧<br>${business.email}</div>`
+                ? `
+                <div class="info-card">
+                    <div class="icon">📧</div>
+                    ${business.email}
+                </div>
+                `
                 : ""
             }
 
             ${
                 business.location
-                ? `<div class="card">📍<br>${business.location}</div>`
+                ? `
+                <div class="info-card">
+                    <div class="icon">📍</div>
+                    ${business.location}
+                </div>
+                `
                 : ""
             }
 
@@ -266,19 +422,30 @@ fetch(`https://deals.wajidtechs.com/bizbox/api?slug=${slug}`)
 
     </section>
 
-    <section class="section">
+    ${
+        galleryHtml
+        ? `
+        <section class="section">
 
-        <h2 class="center">Gallery</h2>
+            <div class="section-title">
+                <h2>Gallery</h2>
+            </div>
 
-        <div class="gallery">
-            ${galleryHtml}
-        </div>
+            <div class="gallery">
+                ${galleryHtml}
+            </div>
 
-    </section>
+        </section>
+        `
+        : ""
+    }
 
     <section class="contact">
 
-        <h2>Contact ${business.business_name || ""}</h2>
+        <h2>
+            Contact
+            ${business.business_name || ""}
+        </h2>
 
         ${
             business.mobile
@@ -294,7 +461,13 @@ fetch(`https://deals.wajidtechs.com/bizbox/api?slug=${slug}`)
 
         ${
             business.mobile
-            ? `<a class="btn" href="tel:${business.mobile}">Call Now</a>`
+            ? `
+            <a
+            href="tel:${business.mobile}"
+            class="btn">
+            Call Now
+            </a>
+            `
             : ""
         }
 
@@ -303,9 +476,10 @@ fetch(`https://deals.wajidtechs.com/bizbox/api?slug=${slug}`)
     ${
         business.mobile
         ? `
-        <a class="whatsapp"
+        <a
+        class="whatsapp"
         target="_blank"
-        href="https://wa.me/${business.mobile.replace(/[^0-9]/g,'')}">
+        href="https://wa.me/${business.mobile.replace(/[^0-9]/g,'')}?text=Hi%20I%20have%20a%20query%20about%20your%20business">
         💬
         </a>
         `
@@ -313,26 +487,33 @@ fetch(`https://deals.wajidtechs.com/bizbox/api?slug=${slug}`)
     }
 
     <footer>
-        © ${new Date().getFullYear()} ${business.business_name}
-        <h5 style="margin-top:10px;">
-            powered by
-            <a href="https://wajidtechs.com" target="_blank">
-                wajidtechs.com
+
+        © ${new Date().getFullYear()}
+        ${business.business_name || ""}
+
+        <div style="margin-top:12px;">
+            Powered by
+            <a
+            href="https://wajidtechs.com"
+            target="_blank">
+            wajidtechs.com
             </a>
-        </h5>
+        </div>
+
     </footer>
+
     `;
 
 })
 .catch(error => {
 
+    console.error(error);
+
     document.getElementById("app").innerHTML = `
         <div class="loading">
-            Failed to load business data.
+            Failed to load business information.
         </div>
     `;
-
-    console.error(error);
 });
 </script>
 
